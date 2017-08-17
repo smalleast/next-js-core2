@@ -359,7 +359,7 @@ if (typeof module !== 'undefined' && module.exports) {
   nx.defineStatic = function (inTarget, inName, inMeta, inMixins) {
     var key = '@' + inName;
 
-    inMixins.forEach(function (mixin) {
+    (inMixins||[]).forEach(function (mixin) {
       key in mixin && (inMeta.__base__ = mixin[key].__meta__);
     });
 
