@@ -100,16 +100,16 @@ nx = {
     return result;
   };
 
-  nx.hashlize = function(inUrl) {
+  nx.hashlize = function (inUrl) {
     var result = {};
-    var query = inUrl ==null ? global.location.search.substring(1):inUrl.substring(inUrl.indexOf('?') + 1);
+    var query = inUrl == null ? global.location.search.substring(1) : inUrl.substring(inUrl.indexOf('?') + 1);
     var params = query.split('&');
     var arr, pair, key, value;
-    nx.each(params, function(_, param) {
+    nx.each(params, function (_, param) {
       pair = param.split('=');
       key = pair[0];
       value = pair[1];
-      if(value){
+      if (value) {
         switch (typeof result[key]) {
           case 'undefined':
             result[key] = decodeURIComponent(value);
@@ -124,6 +124,14 @@ nx = {
       }
     });
     return result;
+  };
+
+  nx.delete = function (inObject, inArray) {
+    var obj = nx.clone({}, inObject, true);
+    inArray.forEach(function (key) {
+      delete obj[key];
+    });
+    return obj;
   };
 
 }(nx, nx.GLOBAL));
