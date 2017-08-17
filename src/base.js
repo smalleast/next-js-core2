@@ -147,6 +147,10 @@ nx = {
     return str.join("&");
   };
 
+  nx.isArray = Array.isArray || function(inObj) {
+    return inObj instanceof Array;
+  };
+
 }(nx, nx.GLOBAL));
 
 
