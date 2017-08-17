@@ -147,8 +147,40 @@ nx = {
     return str.join("&");
   };
 
+  nx.isNull = function(inObj){
+    return inObj === null;
+  };
+
+  nx.isNil = function (inObj){
+    return inObj == null;
+  };
+
+  nx.isNumber = function(inObj) {
+    return !isNaN(inObj) && typeof(inObj) == 'number';
+  };
+
+  nx.isBoolean = function(inObj) {
+    return typeof(inObj) == 'boolean';
+  };
+
+  nx.isString = function(inObj) {
+    return typeof(inObj) == 'string';
+  };
+
   nx.isArray = Array.isArray || function(inObj) {
     return inObj instanceof Array;
+  };
+
+  nx.isArrayLike = function(inObj) {
+    return typeof inObj.length == 'number';
+  };
+
+  nx.isFunction = function(inObj) {
+    return typeof(inObj) == 'function';
+  };
+
+  nx.isObject = function(inObj) {
+    return nx.type(inObj) == 'object';
   };
 
 }(nx, nx.GLOBAL));
