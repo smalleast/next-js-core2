@@ -134,6 +134,19 @@ nx = {
     return obj;
   };
 
+  nx.param = function(inObj) {
+    var str = [];
+    var key, value, encodeValue;
+    for (key in inObj) {
+      value = inObj[key];
+      if (value != null) {
+        encodeValue = nx.isArray(value) ? value.join() : value;
+        str.push(encodeURIComponent(key) + '=' + encodeURIComponent(encodeValue));
+      }
+    }
+    return str.join("&");
+  };
+
 }(nx, nx.GLOBAL));
 
 
