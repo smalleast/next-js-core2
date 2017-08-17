@@ -20,14 +20,14 @@
           },
           methods: {
             init: function () {
-              // console.log('method init!');
+              console.log('method init!');
             }
           }
         });
 
-        var cls1 = new Class1();
-        var prop_member = cls1['@prop1'];
-        var method_member = cls1['@init'];
+        var cls1=new Class1();
+        var prop_member=cls1.member('prop1');
+        var method_member=cls1.member('init');
 
         assert.equal(prop_member.__type__, 'property');
         assert.equal(prop_member.__meta__, '1234');
@@ -90,44 +90,13 @@
         });
 
         var fei = new Programmer('fei', 108, 'js');
-        var type = fei.__type__;
+        var type = fei.type();
         fei.sayHi();
 
-        assert.equal(true, !!~type.indexOf('nx.Anonymous'));
+        assert.equal('nx.Anonymous', type);
         assert.equal(fei._name, 'fei');
         assert.equal(2, num1);
 
-      });
-
-      it('Class multi level extend', function () {
-        var result = 0;
-        var Http = nx.declare({
-          methods: {
-            init: function () {
-              this.koa = {
-                req: 1234
-              }
-            }
-          }
-        });
-
-        var Bussiness = nx.declare({
-          extends: Http
-        });
-
-        var Example = nx.declare({
-          extends: Bussiness,
-          methods: {
-            exec: function () {
-              result = this.koa.req;
-            }
-          }
-        });
-
-        var app = new Example();
-        app.exec();
-
-        assert.equal(result, 1234);
       });
 
 
@@ -161,22 +130,6 @@
       });
 
 
-      it('props is null', function () {
-        var Class1 = nx.declare({
-          properties: {
-            prop1: null
-          },
-          methods: {
-            init: function () {
-              this.prop1 = this.prop1 + '';
-            }
-          }
-        });
-        var cls1 = new Class1();
-        assert.equal('null', cls1.prop1);
-      });
-
-
       it('props has set/get method', function () {
         var Class1 = nx.declare({
           properties: {
@@ -206,13 +159,12 @@
               set: function (inValue) {
                 this._prop1 = inValue * 2;
               }
-            },
-            prop2: 'love'
+            }
           }
         });
 
         var Class2 = nx.declare({
-          extends: Class1,
+          extend: Class1,
           properties: {
             prop1: {
               set: function (inValue) {
@@ -225,10 +177,8 @@
         var cls2 = new Class2();
         cls1.prop1 = 2;
         cls2.prop1 = 2;
-
         assert.equal(4, cls1.prop1);
         assert.equal(204, cls2.prop1);
-        assert.equal('love', cls2.prop2);
       });
 
 

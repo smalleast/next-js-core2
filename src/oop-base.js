@@ -9,8 +9,8 @@
   var classMeta = {
     __classId__: 0,
     __type__: 'nx.RootClass',
-    __module__: 'root',
     __base__: Object,
+    __module__: 'root',
     __meta__: {},
     __init__: nx.noop,
     __static_init__: nx.noop,
@@ -22,8 +22,6 @@
 
   var prototype = classMeta.__methods__ = RootClass.prototype = {
     constructor: RootClass,
-    init: nx.noop,
-    destroy: nx.noop,
     base: function () {
       var callerName, method;
       var args, stackes;
@@ -36,9 +34,35 @@
         stackes = e.stack.split('\n')[2];
         callerName = (stackes.match(callStackRE1) || stackes.match(callStackRE2))[1];
         method = this.$base[callerName];
-        args = [].slice.call(arguments, 0);
+        args = nx.toArray(arguments);
         return method.apply(this, args);
       }
+    },
+    setMeta: function (inName, inValue) {
+      this['__' + inName + '__'] = inValue;
+    },
+    getMeta: function (inName) {
+      return this['__' + inName + '__'];
+    },
+    is: function (inType) {
+      var type = this.__type__;
+      if (type === inType) {
+        return true;
+      } else {
+        var base = this.__base__;
+        if (base) {
+          //todo: remove is
+          return nx.is(base.prototype, inType);
+        } else {
+          return false;
+        }
+      }
+    },
+    type: function () {
+      return this.__type__;
+    },
+    has: function (inName) {
+      return inName in this;
     },
     get: function (inName) {
       var type = this.memberType(inName);
@@ -54,18 +78,6 @@
     set: function (inName, inValue) {
       this[inName] = inValue;
     },
-    gets: function () {
-      var result = {};
-      nx.each(this.__properties__, function (inName) {
-        result[inName] = this.get(inName);
-      }, this);
-      return result;
-    },
-    sets: function (inTarget) {
-      nx.each(inTarget, function (inName, inValue) {
-        this.set(inName, inValue);
-      }, this);
-    },
     member: function (inName) {
       return this['@' + inName];
     },
@@ -77,13 +89,16 @@
       var member = this.member(inName);
       return (member && member.__type__) || 'undefined';
     },
+    init: nx.noop,
+    destroy: nx.noop,
     toString: function () {
       return '[Class@' + this.__type__ + ']';
     }
   };
 
   nx.mix(RootClass, classMeta);
-  nx.mix(prototype, classMeta, nx.event);
+  nx.mix(prototype, classMeta);
+  nx.mix(prototype, nx.event);
 
   nx.RootClass = RootClass;
 
